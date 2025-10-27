@@ -82,7 +82,6 @@ fun MainScreen(onProductClick: (Int) -> Unit) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            val searchBarDescription = stringResource(R.string.searchbar_description)
             SearchBar(
                 query = searchQuery,
                 onQueryChange = { searchQuery = it },
@@ -96,6 +95,7 @@ fun MainScreen(onProductClick: (Int) -> Unit) {
                     )
                 },
                 placeholder = {
+                    val searchBarDescription = stringResource(R.string.searchbar_description)
                     Text(
                         modifier = Modifier.semantics {
                             contentDescription = searchBarDescription
@@ -144,19 +144,20 @@ fun ProductCard(
     onAddToCart: () -> Unit
 ) {
     val actionLabel = stringResource(R.string.add_product_to_cart, product.name)
+    val actions = remember { listOf(
+        CustomAccessibilityAction(
+            label = actionLabel,
+            action = {
+                onAddToCart()
+                true
+            }
+        )
+    ) }
     Card(
         modifier = modifier
             .fillMaxWidth()
             .semantics {
-                customActions = listOf(
-                    CustomAccessibilityAction(
-                        label = actionLabel,
-                        action = {
-                            onAddToCart()
-                            true
-                        }
-                    )
-                )
+                customActions = actions
             }
     ) {
         Column {
